@@ -6,6 +6,9 @@ import { labelFor } from '../../src/quotes';
 import { C, F, SIZES, SizeKey, T } from '../../src/theme';
 import { useStore } from '../../src/store';
 
+const PRIVACY = 'https://kshitijkoranne.github.io/Quotology/privacy';
+const SUPPORT = 'https://kshitijkoranne.github.io/Quotology/support';
+
 export default function Settings() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -76,8 +79,26 @@ export default function Settings() {
           <Text style={chev}>›</Text>
         </Pressable>
 
+        <Pressable style={row} onPress={() => router.push('/attributions')}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={label}>Attributions</Text>
+            <Text style={sub}>Quote sources, translations and typefaces</Text>
+          </View>
+          <Text style={chev}>›</Text>
+        </Pressable>
+
+        <Pressable style={row} onPress={() => Linking.openURL(PRIVACY).catch(() => {})}>
+          <Text style={[label, { flex: 1 }]}>Privacy policy</Text>
+          <Text style={chev}>›</Text>
+        </Pressable>
+
+        <Pressable style={row} onPress={() => Linking.openURL(SUPPORT).catch(() => {})}>
+          <Text style={[label, { flex: 1 }]}>Support</Text>
+          <Text style={chev}>›</Text>
+        </Pressable>
+
         <View style={{ paddingVertical: 17, paddingHorizontal: 22 }}>
-          <Text style={{ fontFamily: F.regular, fontSize: 13, color: C.faint }}>
+          <Text style={{ fontFamily: F.regular, fontSize: 13, color: C.muted }}>
             Quotology 1.0 · {Platform.OS === 'ios' ? 'iOS' : 'Android'} · KJR Labs
           </Text>
         </View>

@@ -197,6 +197,8 @@ type Src = (topics: string[]) => Promise<Quote[]>;
 const zenQuotes: Src = async () => {
   const j = await get('https://zenquotes.io/api/quotes');
   return (j as any[])
+    // Their attribution record is credited on the Attributions screen, which
+    // is what their terms ask for; it is not a quote, so it is not displayed.
     .filter((x) => x && x.q && x.a && x.a !== 'zenquotes.io')
     .slice(0, 12)
     .map((x) => mk(clean(x.q), clean(x.a), guessTags(clean(x.a), x.q), 'Live'));
@@ -252,12 +254,14 @@ const gita: Src = async () => {
       const vs = 1 + Math.floor(Math.random() * GITA_VERSES[ch - 1]);
       try {
         const j: any = await get(`https://vedicscriptures.github.io/slok/${ch}/${vs}`);
-        const en = j?.purohit?.et || j?.siva?.et || j?.gambir?.et || j?.adi?.et;
-        if (!en) return;
-        const text = clean(en).replace(/^\d+\.\d+\.?\s*/, '');
+        // Oldest translations only, and always credited to the translator.
+        const src = j?.purohit?.et ? j.purohit : j?.siva?.et ? j.siva : null;
+        if (!src) return;
+        const text = clean(src.et).replace(/^\d+\.\d+\.?\s*/, '');
         if (text.length < 45 || text.length > 300) return;
+        const who = clean(src.author || '').replace(/^Swami\s+/, '');
         out.push(mk(text, 'Bhagavad Gita', ['gita', 'scripture', 'wisdom'], 'Live',
-          `Chapter ${ch}, Verse ${vs}`));
+          `Chapter ${ch}, Verse ${vs}${who ? ` · trans. ${who}` : ''}`));
       } catch {
         // one missing verse is not a failure
       }
@@ -316,6 +320,22 @@ export async function fetchSet(
   const quotes = interleave(groups.concat([filler]), n);
   return { quotes, live: liveCount > 0 };
 }
+
+/** Everything the app draws on, credited. Rendered on the Attributions
+ *  screen; several of these sources ask for exactly this in their terms. */
+export const CREDITS = [
+  { name: 'QuoteSlate', detail: 'Bundled quote archive', url: 'https://github.com/Musheer360/QuoteSlate' },
+  { name: 'The Mahabharata', detail: 'Translated by Kisari Mohan Ganguli, 1883–1896. Public domain.', url: 'https://www.gutenberg.org/ebooks/15474' },
+  { name: 'ZenQuotes', detail: 'Inspirational quotes provided by ZenQuotes API', url: 'https://zenquotes.io/' },
+  { name: 'The Quotes Hub', detail: 'Quotes by subject', url: 'https://thequoteshub.com/' },
+  { name: 'Bhagavad Gita API', detail: 'Verses with chapter and translator', url: 'https://vedicscriptures.github.io/' },
+  { name: 'Quotable', detail: 'Community mirror of the Quotable dataset', url: 'https://api.quotable.kurokeita.dev/' },
+  { name: 'Stoic Quotes', detail: 'Stoic passages', url: 'https://stoic.tekloon.net/' },
+  { name: 'DummyJSON', detail: 'Open quote endpoint', url: 'https://dummyjson.com/' },
+  { name: 'Bricolage Grotesque', detail: 'Typeface by Atelier Triay. SIL Open Font License 1.1.', url: 'https://github.com/ateliertriay/bricolage' },
+  { name: 'Inter', detail: 'Typeface by Rasmus Andersson. SIL Open Font License 1.1.', url: 'https://rsms.me/inter/' },
+  { name: 'Playfair Display', detail: 'Typeface by Claus Eggers Sørensen. SIL Open Font License 1.1.', url: 'https://github.com/clauseggers/Playfair-Display' },
+];
 
 // ── search ──────────────────────────────────────────────────────────────────
 export function search(q: string, limit = 60): Quote[] {

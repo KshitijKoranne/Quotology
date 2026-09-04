@@ -52,6 +52,7 @@ function Root() {
         <Stack.Screen name="detail" options={{ animation: 'fade' }} />
         <Stack.Screen name="onboarding" options={{ animation: 'fade' }} />
         <Stack.Screen name="topics" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="attributions" options={{ animation: 'slide_from_right' }} />
       </Stack>
       <Toast />
       <ShareSheet />
