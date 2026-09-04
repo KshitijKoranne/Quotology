@@ -1,0 +1,81 @@
+{
+  "expo": {
+    "name": "Quotology",
+    "slug": "quotology",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "quotology",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "in.kjrlabs.quotology",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSPhotoLibraryAddUsageDescription": "Quotology saves the quote poster you chose to your photo library. It never reads your existing photos."
+      }
+    },
+    "android": {
+      "package": "in.kjrlabs.quotology",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#201e1d"
+      },
+      "blockedPermissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Bricolage_600SemiBold.ttf",
+            "./assets/fonts/Bricolage_700Bold.ttf",
+            "./assets/fonts/Bricolage_800ExtraBold.ttf",
+            "./assets/fonts/Inter_400Regular.ttf",
+            "./assets/fonts/Inter_600SemiBold.ttf",
+            "./assets/fonts/Inter_700Bold.ttf",
+            "./assets/fonts/Playfair_700BoldItalic.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#e0574a"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#201e1d"
+        }
+      ],
+      "expo-image",
+      "expo-sharing",
+      [
+        "expo-media-library",
+        {
+          "savePhotosPermission": "Quotology saves the quote poster you chose to your photo library. It never reads your existing photos.",
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": [],
+          "photosPermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
